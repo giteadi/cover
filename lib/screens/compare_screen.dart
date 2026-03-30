@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
 import '../constants/mock_data.dart';
 import '../models/policy.dart';
+import 'detailed_comparison_dialog.dart';
 
 class CompareScreen extends StatefulWidget {
   const CompareScreen({super.key});
@@ -57,25 +58,18 @@ class _CompareScreenState extends State<CompareScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Column(
-        children: [
-          if (compareList.isNotEmpty) _buildComparisonTable(),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: policies.length,
-              itemBuilder: (context, index) {
-                final policy = policies[index];
-                final isSelected = compareList.contains(policy);
-                return _PolicySelectCard(
-                  policy: policy,
-                  isSelected: isSelected,
-                  onToggle: () => toggleCompare(policy),
-                );
-              },
-            ),
-          ),
-        ],
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: policies.length,
+        itemBuilder: (context, index) {
+          final policy = policies[index];
+          final isSelected = compareList.contains(policy);
+          return _PolicySelectCard(
+            policy: policy,
+            isSelected: isSelected,
+            onToggle: () => toggleCompare(policy),
+          );
+        },
       ),
       bottomNavigationBar: compareList.isNotEmpty ? _buildCompareButton() : null,
     );
@@ -155,23 +149,8 @@ class _CompareScreenState extends State<CompareScreen> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('Compare Summary'),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: compareList.map((p) {
-                        return ListTile(
-                          title: Text(p.name),
-                          subtitle: Text('₹${p.premium.toStringAsFixed(0)}/year'),
-                        );
-                      }).toList(),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Close'),
-                      ),
-                    ],
+                  builder: (_) => DetailedComparisonDialog(
+                    policies: compareList,
                   ),
                 );
               },

@@ -6,6 +6,7 @@ import 'screens/policy_list_screen.dart';
 import 'screens/compare_screen.dart';
 import 'screens/premium_calculator_screen.dart';
 import 'screens/claim_assistance_screen.dart';
+import 'screens/term_life_form_screen.dart';
 
 void main() {
   runApp(const CoverShieldApp());

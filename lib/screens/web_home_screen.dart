@@ -3,6 +3,7 @@ import '../constants/app_constants.dart';
 import '../constants/mock_data.dart';
 import '../models/policy.dart';
 import '../utils/responsive_helper.dart';
+import 'term_life_form_screen.dart';
 
 class WebHomeScreen extends StatefulWidget {
   const WebHomeScreen({super.key});
@@ -584,11 +585,21 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                 runSpacing: 20,
                 alignment: WrapAlignment.center,
                 children: categories.map((cat) {
-                  return _buildCategoryCard(
-                    cat['name'] as String,
-                    cat['icon'] as IconData,
-                    cat['discount'] as String,
-                    cat['color'] as Color,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TermLifeFormScreen(category: cat['name'] as String),
+                        ),
+                      );
+                    },
+                    child: _buildCategoryCard(
+                      cat['name'] as String,
+                      cat['icon'] as IconData,
+                      cat['discount'] as String,
+                      cat['color'] as Color,
+                    ),
                   );
                 }).toList(),
               ),
@@ -609,75 +620,11 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
   }
 
   Widget _buildCategoryCard(String name, IconData icon, String discount, Color color) {
-    final width = MediaQuery.of(context).size.width;
-    final isMobile = width < 600;
-    final cardWidth = isMobile ? (width - 48) / 2 : 160.0;
-    
-    return Container(
-      width: cardWidth,
-      height: isMobile ? 160 : 180,
-      padding: EdgeInsets.all(isMobile ? 12 : 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            height: isMobile ? 18 : 20,
-            alignment: Alignment.center,
-            child: discount.isNotEmpty
-                ? Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      discount,
-                      style: TextStyle(
-                        fontSize: isMobile ? 9 : 10,
-                        color: color,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                : const SizedBox.shrink(),
-          ),
-          SizedBox(height: isMobile ? 8 : 12),
-          Container(
-            padding: EdgeInsets.all(isMobile ? 12 : 14),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color, size: isMobile ? 24 : 28),
-          ),
-          SizedBox(height: isMobile ? 8 : 12),
-          Text(
-            name,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: isMobile ? 12 : 13,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
+    return _HoverCategoryCard(
+      name: name,
+      icon: icon,
+      discount: discount,
+      color: color,
     );
   }
 
@@ -1364,6 +1311,118 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
           );
         }).toList(),
       ],
+    );
+  }
+}
+
+class _HoverCategoryCard extends StatefulWidget {
+  final String name;
+  final IconData icon;
+  final String discount;
+  final Color color;
+
+  const _HoverCategoryCard({
+    required this.name,
+    required this.icon,
+    required this.discount,
+    required this.color,
+  });
+
+  @override
+  State<_HoverCategoryCard> createState() => _HoverCategoryCardState();
+}
+
+class _HoverCategoryCardState extends State<_HoverCategoryCard> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 600;
+    final cardWidth = isMobile ? (width - 48) / 2 : 160.0;
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: cardWidth,
+        height: isMobile ? 150 : 170,
+        padding: EdgeInsets.all(isMobile ? 10 : 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isHovered ? AppColors.primary : AppColors.border,
+            width: isHovered ? 2 : 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: isHovered
+                  ? AppColors.primary.withValues(alpha: 0.3)
+                  : Colors.black.withValues(alpha: 0.03),
+              blurRadius: isHovered ? 20 : 10,
+              spreadRadius: isHovered ? 2 : 0,
+              offset: Offset(0, isHovered ? 8 : 2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: isMobile ? 18 : 20,
+              alignment: Alignment.center,
+              child: widget.discount.isNotEmpty
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: widget.color.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        widget.discount,
+                        style: TextStyle(
+                          fontSize: isMobile ? 9 : 10,
+                          color: widget.color,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            SizedBox(height: isMobile ? 6 : 8),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: EdgeInsets.all(isHovered ? 14 : (isMobile ? 10 : 12)),
+              decoration: BoxDecoration(
+                color: widget.color.withValues(alpha: isHovered ? 0.2 : 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                widget.icon,
+                color: widget.color,
+                size: isMobile ? 22 : (isHovered ? 28 : 24),
+              ),
+            ),
+            SizedBox(height: isMobile ? 6 : 8),
+            Text(
+              widget.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: isMobile ? 12 : (isHovered ? 14 : 13),
+                fontWeight: isHovered ? FontWeight.bold : FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
