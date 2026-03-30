@@ -615,7 +615,8 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
     
     return Container(
       width: cardWidth,
-      padding: EdgeInsets.all(isMobile ? 12 : 20),
+      height: isMobile ? 160 : 180,
+      padding: EdgeInsets.all(isMobile ? 12 : 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -629,40 +630,46 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
         ],
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (discount.isNotEmpty)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                discount,
-                style: TextStyle(
-                  fontSize: isMobile ? 9 : 10,
-                  color: color,
-                  fontWeight: FontWeight.w500,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          SizedBox(height: isMobile ? 12 : 16),
           Container(
-            padding: EdgeInsets.all(isMobile ? 12 : 16),
+            height: isMobile ? 18 : 20,
+            alignment: Alignment.center,
+            child: discount.isNotEmpty
+                ? Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      discount,
+                      style: TextStyle(
+                        fontSize: isMobile ? 9 : 10,
+                        color: color,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+          SizedBox(height: isMobile ? 8 : 12),
+          Container(
+            padding: EdgeInsets.all(isMobile ? 12 : 14),
             decoration: BoxDecoration(
               color: color.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: color, size: isMobile ? 24 : 32),
+            child: Icon(icon, color: color, size: isMobile ? 24 : 28),
           ),
-          SizedBox(height: isMobile ? 12 : 16),
+          SizedBox(height: isMobile ? 8 : 12),
           Text(
             name,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: isMobile ? 12 : 14,
+              fontSize: isMobile ? 12 : 13,
               fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
