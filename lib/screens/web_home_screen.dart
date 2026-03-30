@@ -4,6 +4,11 @@ import '../constants/mock_data.dart';
 import '../models/policy.dart';
 import '../utils/responsive_helper.dart';
 import 'term_life_form_screen.dart';
+import 'bmi_calculator_screen.dart';
+import 'life_insurance_calculator_screen.dart';
+import 'health_insurance_premium_calculator_screen.dart';
+import 'home_insurance_screen.dart';
+import 'ask_covershield_screen.dart';
 
 class WebHomeScreen extends StatefulWidget {
   const WebHomeScreen({super.key});
@@ -661,78 +666,105 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
   }
 
   Widget _buildBannerCard(Map<String, dynamic> banner) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            banner['color'] as Color,
-            (banner['color'] as Color).withOpacity(0.8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return GestureDetector(
+      onTap: () {
+        if (banner['title'] == '₹50 Lakh Cover') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeInsuranceScreen()),
+          );
+        } else if (banner['title'] == 'Ask CoverShield') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AskCoverShieldScreen()),
+          );
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              banner['color'] as Color,
+              (banner['color'] as Color).withOpacity(0.8),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
         ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white24,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(Icons.savings, color: Colors.white, size: 20),
-              ),
-              const Spacer(),
-              if (banner['title']!.contains('%'))
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.amber,
+                    color: Colors.white24,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text(
-                    banner['title']!,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E3A8A),
+                  child: const Icon(Icons.savings, color: Colors.white, size: 20),
+                ),
+                const Spacer(),
+                if (banner['title']!.contains('%'))
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      banner['title']!,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E3A8A),
+                      ),
                     ),
                   ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            if (!banner['title']!.contains('%'))
+              Text(
+                banner['title']!,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          if (!banner['title']!.contains('%'))
+              ),
             Text(
-              banner['title']!,
+              banner['description']!,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontSize: 14,
               ),
             ),
-          Text(
-            banner['description']!,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                if (banner['title'] == '₹50 Lakh Cover') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeInsuranceScreen()),
+                  );
+                } else if (banner['title'] == 'Ask CoverShield') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AskCoverShieldScreen()),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: banner['color'] as Color,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              ),
+              child: const Text('Calculate now'),
             ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: banner['color'] as Color,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            ),
-            child: const Text('Calculate now'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -858,7 +890,24 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                 ),
               ),
               trailing: const Icon(Icons.arrow_forward, size: 18, color: AppColors.textSecondary),
-              onTap: () {},
+              onTap: () {
+                if (calc == 'BMI Calculator') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BMICalculatorScreen()),
+                  );
+                } else if (calc == 'Life Insurance Calculator') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LifeInsuranceCalculatorScreen()),
+                  );
+                } else if (calc == 'Health Insurance Premium Calculator') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HealthInsurancePremiumCalculatorScreen()),
+                  );
+                }
+              },
             );
           }).toList()),
         ],
