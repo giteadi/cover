@@ -99,30 +99,42 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
             ),
           ],
         ),
-        actions: [
-          OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.support_agent, size: 16),
-            label: const Text('Claim Assistance'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              side: const BorderSide(color: AppColors.primary),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            ),
-          ),
-          const SizedBox(width: 8),
-          OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.phone, size: 16),
-            label: const Text('Talk to Expert'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              side: const BorderSide(color: AppColors.primary),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            ),
-          ),
-          const SizedBox(width: 16),
-        ],
+        actions: isMobile
+          ? [
+              IconButton(
+                icon: const Icon(Icons.support_agent, color: AppColors.primary),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.phone, color: AppColors.primary),
+                onPressed: () {},
+              ),
+              const SizedBox(width: 8),
+            ]
+          : [
+              OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.support_agent, size: 16),
+                label: const Text('Claim Assistance'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: AppColors.primary),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+              ),
+              const SizedBox(width: 8),
+              OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.phone, size: 16),
+                label: const Text('Talk to Expert'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: AppColors.primary),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -182,17 +194,19 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                   const SizedBox(height: 16),
                   // GST Badge
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFEF3C7),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(color: const Color(0xFFD1D5DB)),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                    child: Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: const Color(0xFFFEE2E2),
                             borderRadius: BorderRadius.circular(4),
@@ -200,39 +214,35 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                           child: const Text(
                             'GST',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFFDC2626),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
                         const Text(
                           'Bachat Utsav',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: Color(0xFF92400E),
                           ),
                         ),
-                        const SizedBox(width: 8),
                         Container(
-                          width: 60,
+                          width: 30,
                           height: 1,
                           color: const Color(0xFFD1D5DB),
                         ),
-                        const SizedBox(width: 8),
                         const Text(
                           '18% GST',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 10,
                             decoration: TextDecoration.lineThrough,
                             color: Color(0xFF9CA3AF),
                           ),
                         ),
-                        const SizedBox(width: 4),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: const Color(0xFFD1FAE5),
                             borderRadius: BorderRadius.circular(4),
@@ -240,7 +250,7 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                           child: const Text(
                             'Now 0%',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF059669),
                             ),
@@ -261,10 +271,11 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                   // Gender Selection
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildGenderButton('Male', Icons.male),
-                      const SizedBox(width: 16),
-                      _buildGenderButton('Female', Icons.female),
+                      _buildGenderButton('Male', Icons.male, isMobile),
+                      const SizedBox(width: 12),
+                      _buildGenderButton('Female', Icons.female, isMobile),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -452,7 +463,7 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
     );
   }
   
-  Widget _buildGenderButton(String gender, IconData icon) {
+  Widget _buildGenderButton(String gender, IconData icon, bool isMobile) {
     final isSelected = selectedGender == gender;
     
     return GestureDetector(
@@ -462,23 +473,24 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 32, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary : Colors.grey[100],
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
               color: isSelected ? Colors.white : AppColors.textSecondary,
-              size: 20,
+              size: isMobile ? 18 : 20,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
             Text(
               gender,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: isMobile ? 13 : 14,
                 fontWeight: FontWeight.w600,
                 color: isSelected ? Colors.white : AppColors.textSecondary,
               ),

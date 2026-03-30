@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
+import 'term_life_form_screen.dart';
+import 'bmi_calculator_screen.dart';
+import 'life_insurance_calculator_screen.dart';
+import 'health_insurance_premium_calculator_screen.dart';
+import 'home_insurance_screen.dart';
+import 'ask_covershield_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -7,18 +13,17 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(),
-              _buildSearchBar(context),
-              _buildCategories(context),
-              _buildWhyChooseUs(),
-              _buildPopularPlans(),
-              _buildQuickActions(context),
+              _buildHeroSection(),
+              _buildInsuranceCategories(context),
+              _buildPromoBanners(context),
+              _buildPopularCalculators(context),
               const SizedBox(height: 24),
             ],
           ),
@@ -29,83 +34,137 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: [
-              Text(
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.shield, color: Colors.white, size: 24),
+              ),
+              const SizedBox(width: 12),
+              const Text(
                 AppConstants.appName,
-                style: const TextStyle(
-                  fontSize: 24,
+                style: TextStyle(
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
                 ),
               ),
-              const SizedBox(height: 4),
-              const Text(
-                AppConstants.tagline,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                ),
-              ),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: const Icon(Icons.notifications_outlined, color: AppColors.primary),
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.search, color: AppColors.textSecondary),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined, color: AppColors.textSecondary),
+                onPressed: () {},
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSearchBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.border),
+  Widget _buildHeroSection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        child: const Row(
-          children: [
-            Icon(Icons.search, color: AppColors.textSecondary),
-            SizedBox(width: 12),
-            Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search insurance plans...',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(color: AppColors.textSecondary),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: const Text(
+                  'Save 15%',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E3A8A),
+                  ),
                 ),
               ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            "Let's find you the Best Insurance",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Compare & buy insurance from 51+ insurers at lowest prices',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white.withOpacity(0.8),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.verified, color: Color(0xFF10B981), size: 16),
+                const SizedBox(width: 6),
+                Text(
+                  'IRDAI Registered',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[700],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildCategories(BuildContext context) {
+  Widget _buildInsuranceCategories(BuildContext context) {
+    final categories = [
+      {'name': 'Term Life', 'icon': Icons.shield, 'color': const Color(0xFF8B5CF6), 'discount': 'Save 15%'},
+      {'name': 'Health', 'icon': Icons.favorite, 'color': const Color(0xFFEF4444), 'discount': 'Save 25%'},
+      {'name': 'Investment', 'icon': Icons.trending_up, 'color': const Color(0xFFF59E0B), 'discount': 'Life Cover'},
+      {'name': 'Car', 'icon': Icons.directions_car, 'color': const Color(0xFF3B82F6), 'discount': 'Lowest Price'},
+    ];
+
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -123,25 +182,28 @@ class HomeScreen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 1.3,
+              childAspectRatio: 1.1,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
             ),
-            itemCount: AppConstants.insuranceCategories.length,
+            itemCount: categories.length,
             itemBuilder: (context, index) {
-              final category = AppConstants.insuranceCategories[index];
-              return _CategoryCard(
-                icon: category['icon'] as IconData,
-                title: category['name'] as String,
-                description: category['description'] as String,
-                color: category['color'] as Color,
+              final cat = categories[index];
+              return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
+                  Navigator.push(
                     context,
-                    '/policies',
-                    arguments: category['id'],
+                    MaterialPageRoute(
+                      builder: (context) => TermLifeFormScreen(category: cat['name'] as String),
+                    ),
                   );
                 },
+                child: _CategoryCard(
+                  name: cat['name'] as String,
+                  icon: cat['icon'] as IconData,
+                  color: cat['color'] as Color,
+                  discount: cat['discount'] as String,
+                ),
               );
             },
           ),
@@ -150,72 +212,106 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildWhyChooseUs() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primary, AppColors.secondary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Why Choose CoverShield?',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+  Widget _buildPromoBanners(BuildContext context) {
+    final banners = [
+      {
+        'title': '₹50 Lakh Cover',
+        'subtitle': 'Home Insurance',
+        'description': 'Starting at ₹80/month*',
+        'color': const Color(0xFF0EA5E9),
+      },
+      {
+        'title': 'Ask CoverShield',
+        'subtitle': 'Expert Advice',
+        'description': 'Write to us about insurance',
+        'color': const Color(0xFFF97316),
+      },
+    ];
+
+    return SizedBox(
+      height: 160,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: banners.length,
+        itemBuilder: (context, index) {
+          final banner = banners[index];
+          return GestureDetector(
+            onTap: () {
+              if (banner['title'] == '₹50 Lakh Cover') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeInsuranceScreen()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AskCoverShieldScreen()),
+                );
+              }
+            },
+            child: Container(
+              width: 200,
+              margin: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    banner['color'] as Color,
+                    (banner['color'] as Color).withOpacity(0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    banner['title'] as String,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    banner['description'] as String,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
+                      fontSize: 12,
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'Calculate now',
+                      style: TextStyle(
+                        color: banner['color'] as Color,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              _buildStat('50+', 'Insurance\nPartners'),
-              _buildStat('98%', 'Claim\nAssistance'),
-              _buildStat('24/7', 'Customer\nSupport'),
-            ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildStat(String value, String label) {
-    return Expanded(
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white70,
-              height: 1.3,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPopularPlans() {
+  Widget _buildPopularCalculators(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -223,7 +319,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Popular Health Plans',
+                'Calculators',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -237,67 +333,43 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _PopularPlanCard(
-            provider: 'Star Health',
-            plan: 'Health Plus Family',
-            cover: '₹5 Lakhs',
-            premium: '₹8,500/year',
-            rating: 4.5,
+          _CalculatorCard(
+            icon: Icons.calculate,
+            title: 'BMI Calculator',
+            subtitle: 'Check your health',
+            color: const Color(0xFF10B981),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const BMICalculatorScreen()),
+              );
+            },
           ),
           const SizedBox(height: 12),
-          _PopularPlanCard(
-            provider: 'HDFC Ergo',
-            plan: 'Optima Secure',
-            cover: '₹10 Lakhs',
-            premium: '₹12,500/year',
-            rating: 4.7,
+          _CalculatorCard(
+            icon: Icons.shield,
+            title: 'Life Insurance Calculator',
+            subtitle: 'Find your coverage',
+            color: const Color(0xFF3B82F6),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LifeInsuranceCalculatorScreen()),
+              );
+            },
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickActions(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Quick Actions',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _QuickActionButton(
-                  icon: Icons.calculate,
-                  label: 'Premium\nCalculator',
-                  onTap: () => Navigator.pushNamed(context, '/calculator'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _QuickActionButton(
-                  icon: Icons.compare,
-                  label: 'Compare\nPlans',
-                  onTap: () => Navigator.pushNamed(context, '/compare'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _QuickActionButton(
-                  icon: Icons.support_agent,
-                  label: 'Claim\nAssistance',
-                  onTap: () => Navigator.pushNamed(context, '/claims'),
-                ),
-              ),
-            ],
+          const SizedBox(height: 12),
+          _CalculatorCard(
+            icon: Icons.health_and_safety,
+            title: 'Health Premium Calculator',
+            subtitle: 'Estimate premium',
+            color: const Color(0xFF8B5CF6),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HealthInsurancePremiumCalculatorScreen()),
+              );
+            },
           ),
         ],
       ),
@@ -306,16 +378,87 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _CategoryCard extends StatelessWidget {
+  final String name;
+  final IconData icon;
+  final Color color;
+  final String discount;
+
+  const _CategoryCard({
+    required this.name,
+    required this.icon,
+    required this.color,
+    required this.discount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[200]!),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              discount,
+              style: TextStyle(
+                fontSize: 10,
+                color: color,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const Spacer(),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CalculatorCard extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String description;
+  final String subtitle;
   final Color color;
   final VoidCallback onTap;
 
-  const _CategoryCard({
+  const _CalculatorCard({
     required this.icon,
     required this.title,
-    required this.description,
+    required this.subtitle,
     required this.color,
     required this.onTap,
   });
@@ -327,48 +470,48 @@ class _CategoryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.border),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.03),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          border: Border.all(color: Colors.grey[200]!),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, color: color, size: 24),
             ),
-            const Spacer(),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 4),
-            Text(
-              description,
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.textSecondary,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Colors.grey[400],
             ),
           ],
         ),
