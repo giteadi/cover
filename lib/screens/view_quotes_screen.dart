@@ -27,6 +27,28 @@ class _ViewQuotesScreenState extends State<ViewQuotesScreen> {
   String _selectedTerm = '30 Years';
   List<Map<String, dynamic>> _selectedPlans = [];
 
+  // Getter for filtered and sorted plans
+  List<Map<String, dynamic>> get filteredPlans {
+    // Filter by coverage
+    var filtered = plans.where((plan) {
+      return plan['coverage'] == _selectedCoverage;
+    }).toList();
+    
+    // Sort based on selected sort option
+    if (_selectedSort == 'Lowest Premium') {
+      filtered.sort((a, b) {
+        final premiumA = int.parse(a['premium'].toString().replaceAll(RegExp(r'[^0-9]'), ''));
+        final premiumB = int.parse(b['premium'].toString().replaceAll(RegExp(r'[^0-9]'), ''));
+        return premiumA.compareTo(premiumB);
+      });
+    } else if (_selectedSort == 'Best Rating') {
+      filtered.sort((a, b) => b['rating'].compareTo(a['rating']));
+    }
+    // For 'Highest Coverage', we'd need different data
+    
+    return filtered;
+  }
+
   // Sample insurance plans
   final List<Map<String, dynamic>> plans = [
     {
@@ -244,7 +266,7 @@ class _ViewQuotesScreenState extends State<ViewQuotesScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${plans.length} Plans Found',
+                        '${filteredPlans.length} Plans Found',
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[600],
@@ -268,7 +290,7 @@ class _ViewQuotesScreenState extends State<ViewQuotesScreen> {
                   const SizedBox(height: 16),
                   
                   // Plan Cards
-                  ...plans.map((plan) => _buildPlanCard(plan, isMobile)),
+                  ...filteredPlans.map((plan) => _buildPlanCard(plan, isMobile)),
                   
                   const SizedBox(height: 40),
                 ],
@@ -812,7 +834,7 @@ class _ViewQuotesScreenState extends State<ViewQuotesScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${plans.length} insurance plans will be downloaded as PDF.'),
+            Text('${filteredPlans.length} insurance plans will be downloaded as PDF.'),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(12),

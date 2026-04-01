@@ -24,6 +24,8 @@ class WebHomeScreen extends StatefulWidget {
 class _WebHomeScreenState extends State<WebHomeScreen> {
   int _currentBannerIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   final List<Map<String, dynamic>> _banners = [
     {
@@ -54,6 +56,65 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
     {'icon': Icons.calculate, 'label': 'Calculators', 'color': AppColors.primary},
     {'icon': Icons.compare, 'label': 'Compare Plans', 'color': AppColors.primary},
   ];
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _performSearch() {
+    final query = _searchController.text.trim().toLowerCase();
+    if (query.isEmpty) return;
+    
+    setState(() {
+      _searchQuery = query;
+    });
+    
+    // Navigate to search results or filter categories based on search
+    final categories = [
+      {'name': 'Term Life Insurance', 'icon': Icons.shield, 'keywords': ['term', 'life', 'insurance', 'death', 'coverage']},
+      {'name': 'Health Insurance', 'icon': Icons.favorite, 'keywords': ['health', 'medical', 'hospital', 'disease']},
+      {'name': 'Car Insurance', 'icon': Icons.directions_car, 'keywords': ['car', 'motor', 'vehicle', 'accident', 'third party']},
+      {'name': '2 Wheeler Insurance', 'icon': Icons.two_wheeler, 'keywords': ['bike', 'two wheeler', 'scooter', 'motorcycle']},
+      {'name': 'Family Health Insurance', 'icon': Icons.family_restroom, 'keywords': ['family', 'parents', 'children', 'group']},
+      {'name': 'Travel Insurance', 'icon': Icons.flight, 'keywords': ['travel', 'trip', 'flight', 'international', 'schengen']},
+      {'name': 'Home Insurance', 'icon': Icons.home, 'keywords': ['home', 'property', 'house', 'fire', 'theft']},
+      {'name': 'Commercial Vehicle', 'icon': Icons.local_shipping, 'keywords': ['commercial', 'truck', 'business', 'goods']},
+    ];
+    
+    final matchedCategory = categories.firstWhere(
+      (cat) => (cat['keywords'] as List<String>).any((keyword) => query.contains(keyword)),
+      orElse: () => {'name': 'Term Life Insurance', 'icon': Icons.shield, 'keywords': []},
+    );
+    
+    // Show search results snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Searching for: $query'),
+        duration: const Duration(seconds: 1),
+      ),
+    );
+    
+    // Navigate to the matched category or default to Term Life
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        if (matchedCategory['name'] == 'Term Life Insurance') {
+          showDialog(
+            context: context,
+            builder: (context) => ConfirmDetailsDialog(userName: 'User'),
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => InsuranceFormScreen(category: matchedCategory['name'] as String),
+            ),
+          );
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -980,18 +1041,20 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
           ),
           child: Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: TextField(
-                  decoration: InputDecoration(
+                  controller: _searchController,
+                  decoration: const InputDecoration(
                     hintText: 'Search insurance plans...',
                     prefixIcon: Icon(Icons.search, color: AppColors.textSecondary),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   ),
+                  onSubmitted: (_) => _performSearch(),
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _performSearch,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
