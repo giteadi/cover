@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'constants/app_constants.dart';
 import 'screens/home_screen.dart';
 import 'screens/web_home_screen.dart';
@@ -7,8 +8,29 @@ import 'screens/compare_screen.dart';
 import 'screens/premium_calculator_screen.dart';
 import 'screens/claim_assistance_screen.dart';
 import 'screens/term_life_form_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/signup_screen.dart';
+import 'screens/forgot_password_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase with default options for web
+  try {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyDummyKeyForWeb",
+        authDomain: "covershield-demo.firebaseapp.com",
+        projectId: "covershield-demo",
+        storageBucket: "covershield-demo.appspot.com",
+        messagingSenderId: "123456789",
+        appId: "1:123456789:web:abcdef123456",
+      ),
+    );
+  } catch (e) {
+    print('Firebase initialization skipped or failed: $e');
+  }
+  
   runApp(const CoverShieldApp());
 }
 
@@ -36,6 +58,9 @@ class CoverShieldApp extends StatelessWidget {
         '/calculator': (context) => const PremiumCalculatorScreen(),
         '/claims': (context) => const ClaimAssistanceScreen(),
         '/web': (context) => const WebHomeScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen(),
+        '/forgot-password': (context) => const ForgotPasswordScreen(),
       },
     );
   }

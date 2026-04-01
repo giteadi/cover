@@ -9,6 +9,7 @@ import 'life_insurance_calculator_screen.dart';
 import 'health_insurance_premium_calculator_screen.dart';
 import 'home_insurance_screen.dart';
 import 'ask_covershield_screen.dart';
+import 'login_screen.dart';
 
 class WebHomeScreen extends StatefulWidget {
   const WebHomeScreen({super.key});
@@ -171,7 +172,10 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/login');
+                        },
                         child: const Text('Sign In / Sign Up'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.primary,
@@ -266,7 +270,9 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                 if (!context.isMobile) ...[
                   const SizedBox(width: 12),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
