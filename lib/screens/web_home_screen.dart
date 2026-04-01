@@ -594,69 +594,81 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                 contentPadding: EdgeInsets.zero,
               ),
               onTap: () {
-                Navigator.pop(context);
                 final optionTitle = option['title'] as String;
+                final themeColor = option['color'] as Color;
+                final icon = option['icon'] as IconData;
+                
+                debugPrint('[RENEW POLICY] onTap called for: $optionTitle');
+                
+                // Navigate without explicit pop - popup closes automatically after onTap
                 if (optionTitle == 'Term Life Renewal') {
+                  debugPrint('[RENEW POLICY] Pushing Term Life Renewal screen');
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PolicyRenewalScreen(
                         renewalType: 'Term Life',
                         title: 'Term Life Renewal',
-                        icon: Icons.umbrella,
-                        themeColor: option['color'] as Color,
+                        icon: icon,
+                        themeColor: themeColor,
                       ),
                     ),
                   );
                 } else if (optionTitle == 'Health Renewal') {
+                  debugPrint('[RENEW POLICY] Pushing Health Renewal screen');
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PolicyRenewalScreen(
                         renewalType: 'Health',
                         title: 'Health Renewal',
-                        icon: Icons.favorite,
-                        themeColor: option['color'] as Color,
+                        icon: icon,
+                        themeColor: themeColor,
                       ),
                     ),
                   );
                 } else if (optionTitle == 'Motor Renewal') {
+                  debugPrint('[RENEW POLICY] Pushing Motor Renewal screen');
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PolicyRenewalScreen(
                         renewalType: 'Motor',
                         title: 'Motor Renewal',
-                        icon: Icons.directions_car,
-                        themeColor: option['color'] as Color,
+                        icon: icon,
+                        themeColor: themeColor,
                       ),
                     ),
                   );
                 } else if (optionTitle == 'Two Wheeler Renewal') {
+                  debugPrint('[RENEW POLICY] Pushing Two Wheeler Renewal screen');
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PolicyRenewalScreen(
                         renewalType: 'Two Wheeler',
                         title: 'Two Wheeler Renewal',
-                        icon: Icons.two_wheeler,
-                        themeColor: option['color'] as Color,
+                        icon: icon,
+                        themeColor: themeColor,
                       ),
                     ),
                   );
                 } else if (optionTitle == 'Home Insurance Renewal') {
+                  debugPrint('[RENEW POLICY] Pushing Home Insurance Renewal screen');
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PolicyRenewalScreen(
                         renewalType: 'Home',
                         title: 'Home Insurance Renewal',
-                        icon: Icons.home,
-                        themeColor: option['color'] as Color,
+                        icon: icon,
+                        themeColor: themeColor,
                       ),
                     ),
                   );
                 }
+                
+                debugPrint('[RENEW POLICY] Navigation completed');
               },
             );
           }).toList();
@@ -1905,6 +1917,8 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
         }).toList(),
       ],
     );
+  }
+
   double _getHorizontalPadding(double width) {
     if (width < 600) return 16;
     if (width < 1024) return 32;
