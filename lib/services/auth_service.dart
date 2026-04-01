@@ -24,10 +24,11 @@ class AuthService {
   // Auth state stream
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  // Sign in with Google
+  // Sign in with Google - uses modal popup style
   Future<User?> signInWithGoogle() async {
     try {
-      // Trigger the Google Sign-In flow
+      // For web, signIn() opens a popup/modal dialog (new GIS behavior)
+      // This shows the Google account selector in a popup instead of redirect
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
@@ -50,6 +51,29 @@ class AuthService {
       return userCredential.user;
     } catch (e) {
       print('Google Sign-In Error: $e');
+      return null;
+    }
+  }
+
+  // Sign in silently (for auto-login if user already authorized)
+  Future<User?> signInSilently() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signInSilently();
+      
+      if (googleUser == null) {
+        return null;
+      }
+      
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      return userCredential.user;
+    } catch (e) {
+      print('Silent Sign-In Error: $e');
       return null;
     }
   }

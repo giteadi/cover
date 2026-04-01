@@ -34,6 +34,117 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  Future<void> _showGoogleSignInModal() async {
+    // Show PolicyBazaar style modal
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        contentPadding: const EdgeInsets.all(0),
+        content: Container(
+          width: 400,
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with Google logo
+              Row(
+                children: [
+                  Image.network(
+                    'https://www.google.com/favicon.ico',
+                    width: 24,
+                    height: 24,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.g_mobiledata, color: Colors.blue, size: 24),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Sign in with Google',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              
+              // Title
+              const Text(
+                'Sign in to CoverShield',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Continue to compare and buy insurance policies',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 24),
+              
+              // Sign in buttons
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _signInWithGoogle();
+                  },
+                  icon: const Icon(Icons.g_mobiledata, color: Colors.white),
+                  label: const Text(
+                    'Continue with Google',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4285F4),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              
+              // Cancel button
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _signInWithGoogle() async {
     setState(() => _isLoading = true);
     final user = await _authService.signInWithGoogle();
@@ -47,14 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
       Navigator.pushReplacementNamed(context, '/');
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Google Sign-In failed. Please try again.'),
-          backgroundColor: Colors.red,
-        ),
-      );
     }
+    // User cancelled - no error shown
   }
 
   @override
@@ -253,7 +358,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _buildSocialButton(
                         'G',
                         const Color(0xFFEA4335),
-                        () => _signInWithGoogle(),
+                        () => _showGoogleSignInModal(),
                       ),
                       const SizedBox(width: 16),
                       _buildSocialButton('f', const Color(0xFF1877F2), () {}),

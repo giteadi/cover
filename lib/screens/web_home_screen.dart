@@ -3,7 +3,7 @@ import '../constants/app_constants.dart';
 import '../constants/mock_data.dart';
 import '../models/policy.dart';
 import '../utils/responsive_helper.dart';
-import 'term_life_form_screen.dart';
+import 'insurance_form_screen.dart';
 import 'bmi_calculator_screen.dart';
 import 'life_insurance_calculator_screen.dart';
 import 'health_insurance_premium_calculator_screen.dart';
@@ -250,10 +250,10 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                 ),
                 const Spacer(),
                 if (isWide) ...[
-                  _buildNavItem('Insurance Products', true),
-                  _buildNavItem('Renew Your Policy', false),
-                  _buildNavItem('Claim', false),
-                  _buildNavItem('Support', false),
+                  _buildInsuranceProductsDropdown(),
+                  _buildRenewPolicyDropdown(),
+                  _buildClaimDropdown(),
+                  _buildSupportDropdown(),
                   const SizedBox(width: 16),
                 ],
                 if (!context.isMobile)
@@ -312,6 +312,483 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInsuranceProductsDropdown() {
+    final insuranceProducts = {
+      'Term Insurance': [
+        'Term Insurance',
+        'Life Insurance',
+        'Best Term Insurance Plan',
+        'Term Insurance for NRI',
+        'What is Term Insurance',
+        '1 Crore Term Insurance',
+        'Term Insurance Calculator',
+        'Dedicated Claim Assistance',
+        'Term Insurance for Women',
+        'Term Insurance for HNI',
+        'Term Insurance Return of Premium',
+      ],
+      'Other Insurance': [
+        'Travel Insurance',
+        'International Travel Insurance',
+        'Schengen travel insurance',
+        'Group Health Insurance',
+        'Marine Insurance',
+        'Workmen Compensation Policy',
+        'Professional Indemnity',
+        'Doctors Indemnity Insurance',
+        'Fire Insurance',
+        'Shopkeepers Insurance',
+        'Office Insurance',
+        'Comprehensive General Liability',
+        'Cyber Insurance',
+        'Contractors All Risk',
+        'Surety Bond',
+        'Home Insurance',
+        'Home Loan Insurance',
+        'Home Loan EMI Calculator',
+        'Pet Insurance',
+        'Cancer Insurance',
+        'Defence Personnel Insurance',
+        'General Insurance',
+      ],
+      'Health Insurance': [
+        'Book Free Home Visit',
+        'Family Health Insurance',
+        'Senior Citizen Health Insurance',
+        'Health Insurance for Parents',
+        'Maternity Insurance',
+        'Network Hospitals',
+        'Health Insurance Portability',
+        'OPD Cover In Health Insurance',
+        'Mediclaim Policy',
+        'Critical Illness Insurance',
+        'Health Insurance Calculator',
+        'Health Insurance Companies',
+        'Types of Health Insurance',
+        'Health Insurance for NRIs',
+      ],
+      'Car Insurance': [
+        'Motor Insurance',
+        'Bike Insurance',
+        'Zero Dep Car Insurance',
+        'Third Party Insurance',
+        'Third Party Bike Insurance',
+        'Car Insurance Calculator',
+        'Bike Insurance Calculator',
+        'Car Insurance Companies',
+        'Pay As You Drive Insurance',
+        'Commercial Vehicle Insurance',
+        'Electric Car Insurance',
+        'E-Bike Insurance',
+        'IDV Calculator',
+        'Comprehensive Insurance',
+        'New Car Insurance',
+        'Car Insurance Status',
+      ],
+    };
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: PopupMenuButton<String>(
+        offset: const Offset(0, 40),
+        constraints: const BoxConstraints(maxWidth: 800, maxHeight: 600),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Insurance Products',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: 16,
+              color: AppColors.primary,
+            ),
+          ],
+        ),
+        itemBuilder: (context) {
+          final entriesList = insuranceProducts.entries.toList();
+          final midPoint = (entriesList.length / 2).ceil();
+          final leftColumns = entriesList.sublist(0, midPoint);
+          final rightColumns = entriesList.sublist(midPoint);
+
+          return [
+            PopupMenuItem<String>(
+              enabled: false,
+              child: Container(
+                width: 700,
+                constraints: const BoxConstraints(maxHeight: 550),
+                child: SingleChildScrollView(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Left side columns
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: leftColumns.map((entry) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                                  child: Text(
+                                    entry.key,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ),
+                                const Divider(height: 1),
+                                ...entry.value.map((item) {
+                                  return ListTile(
+                                    dense: true,
+                                    title: Text(
+                                      item,
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => InsuranceFormScreen(category: item),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                                const SizedBox(height: 8),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      // Right side columns
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: rightColumns.map((entry) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                                  child: Text(
+                                    entry.key,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ),
+                                const Divider(height: 1),
+                                ...entry.value.map((item) {
+                                  return ListTile(
+                                    dense: true,
+                                    title: Text(
+                                      item,
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => InsuranceFormScreen(category: item),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                                const SizedBox(height: 8),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ];
+        },
+      ),
+    );
+  }
+
+  Widget _buildRenewPolicyDropdown() {
+    final renewOptions = [
+      {'icon': Icons.umbrella, 'title': 'Term Life Renewal', 'color': Color(0xFF8B5CF6)},
+      {'icon': Icons.favorite, 'title': 'Health Renewal', 'color': Color(0xFFEF4444)},
+      {'icon': Icons.directions_car, 'title': 'Motor Renewal', 'color': Color(0xFF3B82F6)},
+      {'icon': Icons.two_wheeler, 'title': 'Two Wheeler Renewal', 'color': Color(0xFF10B981)},
+      {'icon': Icons.home, 'title': 'Home Insurance Renewal', 'color': Color(0xFF06B6D4)},
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: PopupMenuButton<String>(
+        offset: const Offset(0, 40),
+        constraints: const BoxConstraints(minWidth: 280),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Renew Your Policy',
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: 16,
+              color: AppColors.textSecondary,
+            ),
+          ],
+        ),
+        itemBuilder: (context) {
+          return renewOptions.map((option) {
+            return PopupMenuItem<String>(
+              value: option['title'] as String,
+              child: ListTile(
+                leading: Icon(
+                  option['icon'] as IconData,
+                  color: option['color'] as Color,
+                  size: 20,
+                ),
+                title: Text(
+                  option['title'] as String,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${option['title']} - Coming Soon!'),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              },
+            );
+          }).toList();
+        },
+      ),
+    );
+  }
+
+  Widget _buildClaimDropdown() {
+    final claimOptions = [
+      'File a new claim',
+      'Claim is already filed with the Insurer',
+      'Know more about filing claim',
+      'Track existing claim',
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: PopupMenuButton<String>(
+        offset: const Offset(0, 40),
+        constraints: const BoxConstraints(minWidth: 320),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Claim',
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: 16,
+              color: AppColors.textSecondary,
+            ),
+          ],
+        ),
+        itemBuilder: (context) {
+          return claimOptions.map((option) {
+            return PopupMenuItem<String>(
+              value: option,
+              child: Text(
+                option,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                if (option == 'File a new claim') {
+                  Navigator.pushNamed(context, '/claim-assistance');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('$option - Coming Soon!'),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
+            );
+          }).toList();
+        },
+      ),
+    );
+  }
+
+  Widget _buildSupportDropdown() {
+    final supportOptions = [
+      {'icon': Icons.receipt_long, 'title': 'Track payments / policy status'},
+      {'icon': Icons.verified_user, 'title': 'Verify advisor'},
+      {'icon': Icons.policy, 'title': 'View / manage policies'},
+      {'icon': Icons.feedback, 'title': 'Advisor Feedback'},
+      {'icon': Icons.assignment, 'title': 'Claims'},
+      {'icon': Icons.phone_callback, 'title': 'Get a call back'},
+      {'icon': Icons.settings, 'title': 'Communication preferences'},
+      {'icon': Icons.chat, 'title': 'Chat With Us'},
+      {'icon': Icons.help_outline, 'title': 'Get help/Report an issue'},
+      {'icon': Icons.more_horiz, 'title': 'View more'},
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: PopupMenuButton<String>(
+        offset: const Offset(0, 40),
+        constraints: const BoxConstraints(minWidth: 320, maxWidth: 400),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Support',
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: 16,
+              color: AppColors.textSecondary,
+            ),
+          ],
+        ),
+        itemBuilder: (context) {
+          return [
+            PopupMenuItem<String>(
+              enabled: false,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Account & Service Help',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Log in to your account to get personalised support.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/login');
+                      },
+                      child: Text(
+                        'Login with email',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const PopupMenuDivider(),
+            ...supportOptions.map((option) {
+              return PopupMenuItem<String>(
+                value: option['title'] as String,
+                child: ListTile(
+                  leading: Icon(
+                    option['icon'] as IconData,
+                    color: AppColors.textSecondary,
+                    size: 20,
+                  ),
+                  title: Text(
+                    option['title'] as String,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppColors.textSecondary,
+                  ),
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${option['title']} - Coming Soon!'),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          ];
+        },
       ),
     );
   }
@@ -574,11 +1051,11 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
     final categories = [
       {'name': 'Term Life Insurance', 'icon': Icons.shield, 'discount': 'Upto 15% Discount', 'color': Color(0xFF8B5CF6)},
       {'name': 'Health Insurance', 'icon': Icons.favorite, 'discount': 'Upto 25% Discount', 'color': Color(0xFFEF4444)},
-      {'name': 'Investment Plans', 'icon': Icons.trending_up, 'discount': 'In-Built Life Cover', 'color': Color(0xFFF59E0B)},
       {'name': 'Car Insurance', 'icon': Icons.directions_car, 'discount': 'Lowest Price Guarantee', 'color': Color(0xFF3B82F6)},
       {'name': '2 Wheeler Insurance', 'icon': Icons.two_wheeler, 'discount': 'Upto 85% Discount', 'color': Color(0xFF10B981)},
       {'name': 'Family Health Insurance', 'icon': Icons.family_restroom, 'discount': 'Upto 25% Discount', 'color': Color(0xFFEC4899)},
       {'name': 'Travel Insurance', 'icon': Icons.flight, 'discount': '', 'color': Color(0xFF06B6D4)},
+      {'name': 'Home Insurance', 'icon': Icons.home, 'discount': 'Property Protection', 'color': Color(0xFF8B5CF6)},
       {'name': 'Commercial Vehicle', 'icon': Icons.local_shipping, 'discount': '', 'color': Color(0xFF6366F1)},
     ];
 
@@ -601,7 +1078,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TermLifeFormScreen(category: cat['name'] as String),
+                          builder: (context) => InsuranceFormScreen(category: cat['name'] as String),
                         ),
                       );
                     },

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
-import 'confirm_details_dialog.dart';
+import 'view_quotes_screen.dart';
 
-class TermLifeFormScreen extends StatefulWidget {
+class InsuranceFormScreen extends StatefulWidget {
   final String category;
   
-  const TermLifeFormScreen({super.key, required this.category});
+  const InsuranceFormScreen({super.key, required this.category});
   
   @override
-  State<TermLifeFormScreen> createState() => _TermLifeFormScreenState();
+  State<InsuranceFormScreen> createState() => _InsuranceFormScreenState();
 }
 
-class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
+class _InsuranceFormScreenState extends State<InsuranceFormScreen> {
   String selectedGender = 'Male';
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
@@ -27,10 +27,8 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
   }
 
   void _calculateAge(String dob) {
-    // Auto-format date with slashes
     String formattedDob = _formatDateWithSlashes(dob);
     
-    // Update controller if formatting changed the value
     if (formattedDob != dob && formattedDob != _dobController.text) {
       final cursorPosition = _dobController.selection.start;
       _dobController.value = TextEditingValue(
@@ -50,15 +48,18 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
           final day = int.parse(parts[0]);
           final month = int.parse(parts[1]);
           final year = int.parse(parts[2]);
+          
           final birthDate = DateTime(year, month, day);
-          final now = DateTime.now();
-          int age = now.year - birthDate.year;
-          if (now.month < birthDate.month || 
-              (now.month == birthDate.month && now.day < birthDate.day)) {
+          final today = DateTime.now();
+          
+          int age = today.year - birthDate.year;
+          if (today.month < birthDate.month || 
+              (today.month == birthDate.month && today.day < birthDate.day)) {
             age--;
           }
+          
           setState(() {
-            _age = '$age years';
+            _age = '$age Years';
           });
         }
       } catch (e) {
@@ -72,19 +73,13 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
       });
     }
   }
-  
-  String _formatDateWithSlashes(String value) {
-    // Remove all non-digit characters
-    String digitsOnly = value.replaceAll(RegExp(r'[^0-9]'), '');
+
+  String _formatDateWithSlashes(String input) {
+    String digitsOnly = input.replaceAll(RegExp(r'[^0-9]'), '');
     
-    // Limit to 8 digits (DDMMYYYY)
-    if (digitsOnly.length > 8) {
-      digitsOnly = digitsOnly.substring(0, 8);
-    }
-    
-    // Add slashes at appropriate positions
     StringBuffer result = StringBuffer();
-    for (int i = 0; i < digitsOnly.length; i++) {
+    
+    for (int i = 0; i < digitsOnly.length && i < 8; i++) {
       if (i == 2 || i == 4) {
         result.write('/');
       }
@@ -94,9 +89,123 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
     return result.toString();
   }
   
+  // Category-specific data
+  Map<String, dynamic> get _categoryData {
+    final data = {
+      'Term Insurance': {
+        'description': 'Term Insurance is a legal contract between a policyholder and an insurance company. In a term insurance policy, the insurance company promises to pay a sum of money to the policyholder\'s loved ones if the policyholder dies during a specified period.',
+        'benefits': [
+          {'icon': Icons.verified, 'text': 'Get ₹1 Crore Coverage at Affordable Premiums'},
+          {'icon': Icons.trending_up, 'text': 'High Sum Assured at Low Premium Rates'},
+          {'icon': Icons.family_restroom, 'text': 'Financial Security for Your Family'},
+          {'icon': Icons.receipt_long, 'text': 'Tax Benefits under Section 80C & 10D'},
+        ],
+        'coverageAmount': '₹1 Crore',
+        'startingPrice': '₹409/month',
+        'stats': {'rating': '4.8', 'policies': '6.29 Crore', 'users': '13.2 Crore', 'partners': '53'},
+        'showGender': true,
+        'showDob': true,
+        'buttonText': 'View Term Quotes',
+      },
+      'Life Insurance': {
+        'description': 'Life Insurance provides financial protection to your family in case of an unfortunate event. It ensures that your loved ones can maintain their lifestyle and meet their financial goals even in your absence.',
+        'benefits': [
+          {'icon': Icons.verified, 'text': 'Complete Life Coverage with Maturity Benefits'},
+          {'icon': Icons.savings, 'text': 'Savings Component with Insurance Protection'},
+          {'icon': Icons.paid, 'text': 'Guaranteed Returns on Investment'},
+          {'icon': Icons.receipt_long, 'text': 'Tax Benefits on Premiums & Returns'},
+        ],
+        'coverageAmount': '₹50 Lakhs',
+        'startingPrice': '₹2,000/month',
+        'stats': {'rating': '4.7', 'policies': '5.8 Crore', 'users': '11 Crore', 'partners': '48'},
+        'showGender': true,
+        'showDob': true,
+        'buttonText': 'View Life Plans',
+      },
+      'Health Insurance': {
+        'description': 'Health Insurance covers medical expenses incurred due to illnesses, injuries, or accidents. It ensures that you get the best medical treatment without worrying about the costs.',
+        'benefits': [
+          {'icon': Icons.local_hospital, 'text': 'Cashless Treatment at 10,000+ Hospitals'},
+          {'icon': Icons.medication, 'text': 'Coverage for Pre & Post Hospitalization'},
+          {'icon': Icons.healing, 'text': 'Annual Health Check-ups Included'},
+          {'icon': Icons.add_circle, 'text': 'No Claim Bonus up to 100%'},
+        ],
+        'coverageAmount': '₹10 Lakhs',
+        'startingPrice': '₹500/month',
+        'stats': {'rating': '4.6', 'policies': '4.2 Crore', 'users': '8.5 Crore', 'partners': '42'},
+        'showGender': true,
+        'showDob': true,
+        'buttonText': 'View Health Plans',
+      },
+      'Car Insurance': {
+        'description': 'Car Insurance protects your vehicle against damages caused by accidents, theft, natural calamities, or third-party liabilities. Drive worry-free with comprehensive coverage.',
+        'benefits': [
+          {'icon': Icons.directions_car, 'text': 'Cashless Repairs at 7,500+ Garages'},
+          {'icon': Icons.shield, 'text': 'Own Damage & Third-Party Coverage'},
+          {'icon': Icons.support_agent, 'text': '24x7 Roadside Assistance'},
+          {'icon': Icons.bolt, 'text': 'Instant Policy Issuance'},
+        ],
+        'coverageAmount': 'IDV upto ₹15 Lakhs',
+        'startingPrice': '₹2,094/year',
+        'stats': {'rating': '4.5', 'policies': '3.8 Crore', 'users': '6.2 Crore', 'partners': '38'},
+        'showGender': false,
+        'showDob': false,
+        'buttonText': 'View Car Plans',
+      },
+      'Bike Insurance': {
+        'description': 'Two Wheeler Insurance provides financial protection for your bike/scooter against damages, theft, and third-party liabilities. Ride safe with complete coverage.',
+        'benefits': [
+          {'icon': Icons.two_wheeler, 'text': 'Coverage for All Bike Types'},
+          {'icon': Icons.shield, 'text': 'Third-Party & Own Damage Cover'},
+          {'icon': Icons.support_agent, 'text': '24x7 Roadside Assistance'},
+          {'icon': Icons.bolt, 'text': 'Instant Policy in 2 Minutes'},
+        ],
+        'coverageAmount': 'IDV upto ₹3 Lakhs',
+        'startingPrice': '₹538/year',
+        'stats': {'rating': '4.4', 'policies': '2.5 Crore', 'users': '4.8 Crore', 'partners': '35'},
+        'showGender': false,
+        'showDob': false,
+        'buttonText': 'View Bike Plans',
+      },
+      'Travel Insurance': {
+        'description': 'Travel Insurance covers medical emergencies, trip cancellations, lost baggage, and other unforeseen events during your domestic or international travels.',
+        'benefits': [
+          {'icon': Icons.flight, 'text': 'Medical Emergency Coverage Abroad'},
+          {'icon': Icons.luggage, 'text': 'Lost Baggage & Passport Protection'},
+          {'icon': Icons.cancel, 'text': 'Trip Cancellation & Curtailment Cover'},
+          {'icon': Icons.support_agent, 'text': '24x7 Global Assistance'},
+        ],
+        'coverageAmount': r'$500,000',
+        'startingPrice': '₹200/day',
+        'stats': {'rating': '4.3', 'policies': '1.2 Crore', 'users': '2.5 Crore', 'partners': '28'},
+        'showGender': true,
+        'showDob': true,
+        'buttonText': 'View Travel Plans',
+      },
+      'Home Insurance': {
+        'description': 'Home Insurance protects your home and its contents against natural disasters, theft, fire, and other risks. Secure your biggest investment with comprehensive coverage.',
+        'benefits': [
+          {'icon': Icons.home, 'text': 'Building & Contents Coverage'},
+          {'icon': Icons.local_fire_department, 'text': 'Fire & Natural Disaster Protection'},
+          {'icon': Icons.warning, 'text': 'Theft & Burglary Coverage'},
+          {'icon': Icons.electrical_services, 'text': 'Electrical & Plumbing Damage Cover'},
+        ],
+        'coverageAmount': '₹50 Lakhs',
+        'startingPrice': '₹1,200/year',
+        'stats': {'rating': '4.2', 'policies': '80 Lakh', 'users': '1.5 Crore', 'partners': '25'},
+        'showGender': false,
+        'showDob': false,
+        'buttonText': 'View Home Plans',
+      },
+    };
+    
+    return data[widget.category] ?? data['Term Insurance']!;
+  }
+  
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 900;
+    final categoryData = _categoryData;
     
     return Scaffold(
       backgroundColor: Colors.white,
@@ -182,17 +291,17 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLeftContent(),
+                  _buildLeftContent(categoryData),
                   const SizedBox(height: 32),
-                  _buildRightFormCard(isMobile),
+                  _buildRightFormCard(isMobile, categoryData),
                 ],
               )
             : Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: _buildLeftContent()),
+                  Expanded(child: _buildLeftContent(categoryData)),
                   const SizedBox(width: 60),
-                  SizedBox(width: 420, child: _buildRightFormCard(isMobile)),
+                  SizedBox(width: 420, child: _buildRightFormCard(isMobile, categoryData)),
                 ],
               ),
         ),
@@ -200,7 +309,10 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
     );
   }
   
-  Widget _buildLeftContent() {
+  Widget _buildLeftContent(Map<String, dynamic> data) {
+    final benefits = data['benefits'] as List<Map<String, dynamic>>;
+    final stats = data['stats'] as Map<String, String>;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -233,7 +345,7 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
         
         // Description
         Text(
-          '${widget.category} is a legal contract between a policyholder and an insurance company. In a ${widget.category.toLowerCase()} policy, the insurance company promises to pay a sum of money to the policyholder\'s loved ones if the policyholder dies during a specified period. In return, the policyholder pays a small premium to the insurance company.',
+          data['description'],
           style: const TextStyle(
             fontSize: 14,
             color: AppColors.textSecondary,
@@ -274,7 +386,7 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     Text(
-                      'Wealth Creation',
+                      'Benefits',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -289,15 +401,12 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildBulletPoint(Icons.verified, 'Get ₹1 Crore Coverage at Affordable Premiums'),
-                    const SizedBox(height: 12),
-                    _buildBulletPoint(Icons.trending_up, 'Invest in Top-Performing Plans with High Returns'),
-                    const SizedBox(height: 12),
-                    _buildBulletPoint(Icons.show_chart, 'Market-Linked & Guaranteed Growth Options'),
-                    const SizedBox(height: 12),
-                    _buildBulletPoint(Icons.people, 'Trusted by 15+ Lakh Families'),
-                  ],
+                  children: benefits.map((benefit) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: _buildBulletPoint(benefit['icon'] as IconData, benefit['text'] as String),
+                    );
+                  }).toList(),
                 ),
               ),
             ],
@@ -315,13 +424,13 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatColumn('4.8', 'Rated', true),
+              _buildStatColumn(stats['rating']!, 'Rated', true),
               Container(height: 40, width: 1, color: Colors.grey[300]),
-              _buildStatColumn('6.29 Crore', 'Policies Sold', false),
+              _buildStatColumn(stats['policies']!, 'Policies Sold', false),
               Container(height: 40, width: 1, color: Colors.grey[300]),
-              _buildStatColumn('13.2 Crore', 'Registered Consumer', false),
+              _buildStatColumn(stats['users']!, 'Registered Users', false),
               Container(height: 40, width: 1, color: Colors.grey[300]),
-              _buildStatColumn('53', 'Partners', false),
+              _buildStatColumn(stats['partners']!, 'Partners', false),
             ],
           ),
         ),
@@ -395,7 +504,7 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
     );
   }
   
-  Widget _buildRightFormCard(bool isMobile) {
+  Widget _buildRightFormCard(bool isMobile, Map<String, dynamic> data) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -427,32 +536,12 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                       color: const Color(0xFF1976D2),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'Term Insurance',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
                     child: Center(
                       child: Text(
-                        'Investment plans',
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w500,
+                        widget.category,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),
                       ),
@@ -476,9 +565,9 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                     text: TextSpan(
                       style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
                       children: [
-                        const TextSpan(text: 'Protect your family today and get ₹1 Crore '),
+                        TextSpan(text: 'Get ${data['coverageAmount']} coverage starting from '),
                         TextSpan(
-                          text: '@₹409/month*',
+                          text: '${data['startingPrice']}*',
                           style: TextStyle(
                             color: Colors.blue[700],
                             fontWeight: FontWeight.bold,
@@ -490,15 +579,17 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                 ),
                 const SizedBox(height: 20),
                 
-                // Gender Selection
-                Row(
-                  children: [
-                    _buildRadioGender('Male'),
-                    const SizedBox(width: 24),
-                    _buildRadioGender('Female'),
-                  ],
-                ),
-                const SizedBox(height: 16),
+                // Gender Selection (conditional)
+                if (data['showGender']) ...[
+                  Row(
+                    children: [
+                      _buildRadioGender('Male'),
+                      const SizedBox(width: 24),
+                      _buildRadioGender('Female'),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 
                 // Name Field
                 _buildFormTextField(
@@ -508,32 +599,34 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                 ),
                 const SizedBox(height: 12),
                 
-                // DOB Field
-                _buildFormTextField(
-                  icon: Icons.calendar_today,
-                  hint: 'Date of Birth (DD/MM/YYYY)',
-                  controller: _dobController,
-                  onChanged: _calculateAge,
-                  suffix: _age.isNotEmpty
-                    ? Container(
-                        margin: const EdgeInsets.only(right: 12),
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.blue[50],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          _age,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue[700],
-                            fontWeight: FontWeight.w500,
+                // DOB Field (conditional)
+                if (data['showDob']) ...[
+                  _buildFormTextField(
+                    icon: Icons.calendar_today,
+                    hint: 'Date of Birth (DD/MM/YYYY)',
+                    controller: _dobController,
+                    onChanged: _calculateAge,
+                    suffix: _age.isNotEmpty
+                      ? Container(
+                          margin: const EdgeInsets.only(right: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.blue[50],
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        ),
-                      )
-                    : null,
-                ),
-                const SizedBox(height: 12),
+                          child: Text(
+                            _age,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.blue[700],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        )
+                      : null,
+                  ),
+                  const SizedBox(height: 12),
+                ],
                 
                 // Mobile Field with Country Code
                 Container(
@@ -591,10 +684,15 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                       final name = _nameController.text.isNotEmpty 
                           ? _nameController.text 
                           : 'User';
-                      showDialog(
-                        context: context,
-                        builder: (context) => ConfirmDetailsDialog(
-                          userName: name,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewQuotesScreen(
+                            category: widget.category,
+                            name: name,
+                            gender: selectedGender,
+                            age: _age.isNotEmpty ? _age.replaceAll(' Years', '') : '30',
+                          ),
                         ),
                       );
                     },
@@ -606,9 +704,9 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
-                      'View Term Quotes',
-                      style: TextStyle(
+                    child: Text(
+                      data['buttonText'],
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -620,7 +718,7 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                 // Terms text
                 Center(
                   child: Text(
-                    'By clicking on "View Term Quotes" you agree to our Privacy Policy and Terms of use',
+                    'By clicking on "${data['buttonText']}" you agree to our Privacy Policy and Terms of use',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 10,
