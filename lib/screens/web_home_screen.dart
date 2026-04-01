@@ -55,11 +55,14 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 600;
+    
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: _buildWebAppBar(),
-      drawer: context.isMobile ? _buildMobileDrawer() : null,
+      drawer: isMobile ? _buildMobileDrawer() : null,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -200,7 +203,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
       backgroundColor: Colors.white,
       elevation: 0,
       toolbarHeight: 70,
-      leading: context.isMobile
+      leading: MediaQuery.of(context).size.width < 600
           ? IconButton(
               icon: const Icon(Icons.menu, color: AppColors.textPrimary),
               onPressed: () {
@@ -257,7 +260,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                   _buildSupportDropdown(),
                   const SizedBox(width: 16),
                 ],
-                if (!context.isMobile)
+                if (MediaQuery.of(context).size.width >= 600)
                   OutlinedButton.icon(
                     onPressed: () {},
                     icon: const Icon(Icons.phone, size: 16),
@@ -268,7 +271,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     ),
                   ),
-                if (!context.isMobile) ...[
+                if (MediaQuery.of(context).size.width >= 600) ...[
                   const SizedBox(width: 12),
                   ElevatedButton(
                     onPressed: () {
@@ -855,10 +858,11 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
       builder: (context, constraints) {
         final isWide = constraints.maxWidth > 1000;
         final isMobile = constraints.maxWidth < 600;
-        final padding = context.hPadding;
+        final hPadding = _getHorizontalPadding(constraints.maxWidth);
+        final vPadding = _getVerticalPadding(constraints.maxWidth);
         
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: padding, vertical: context.vPadding),
+          padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding),
           child: isWide 
             ? Row(
                 children: [
@@ -910,7 +914,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
         Text(
           "Let's find you",
           style: TextStyle(
-            fontSize: context.headingSize * (isMobile ? 0.7 : (isWide ? 1 : 0.85)),
+            fontSize: _getHeadingSize(isMobile, isWide) * (isMobile ? 0.7 : (isWide ? 1 : 0.85)),
             fontWeight: FontWeight.w300,
             color: AppColors.textPrimary,
           ),
@@ -918,7 +922,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
         Text(
           'the Best Insurance',
           style: TextStyle(
-            fontSize: context.headingSize * (isMobile ? 0.7 : (isWide ? 1 : 0.85)),
+            fontSize: _getHeadingSize(isMobile, isWide) * (isMobile ? 0.7 : (isWide ? 1 : 0.85)),
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
@@ -1901,6 +1905,23 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
         }).toList(),
       ],
     );
+  double _getHorizontalPadding(double width) {
+    if (width < 600) return 16;
+    if (width < 1024) return 32;
+    if (width < 1440) return 80;
+    return 120;
+  }
+
+  double _getVerticalPadding(double width) {
+    if (width < 600) return 40;
+    if (width < 1024) return 50;
+    return 60;
+  }
+
+  double _getHeadingSize(bool isMobile, bool isWide) {
+    if (isMobile) return 28;
+    if (isWide) return 48;
+    return 36;
   }
 }
 
