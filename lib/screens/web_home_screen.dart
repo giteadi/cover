@@ -4,6 +4,8 @@ import '../constants/mock_data.dart';
 import '../models/policy.dart';
 import '../utils/responsive_helper.dart';
 import 'insurance_form_screen.dart';
+import 'term_life_form_screen.dart';
+import 'confirm_details_dialog.dart';
 import 'policy_renewal_screen.dart';
 import 'bmi_calculator_screen.dart';
 import 'life_insurance_calculator_screen.dart';
@@ -63,18 +65,17 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
       backgroundColor: Colors.white,
       appBar: _buildWebAppBar(),
       drawer: isMobile ? _buildMobileDrawer() : null,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeroSection(),
-            _buildInsuranceCategories(),
-            _buildPromoBanners(),
-            _buildPopularCalculators(),
-            _buildStatsSection(),
-            _buildAdvantagesSection(),
-            _buildFooter(),
-          ],
-        ),
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverToBoxAdapter(child: _buildHeroSection()),
+          SliverToBoxAdapter(child: _buildInsuranceCategories()),
+          SliverToBoxAdapter(child: _buildPromoBanners()),
+          SliverToBoxAdapter(child: _buildPopularCalculators()),
+          SliverToBoxAdapter(child: _buildStatsSection()),
+          SliverToBoxAdapter(child: _buildAdvantagesSection()),
+          SliverToBoxAdapter(child: _buildFooter()),
+        ],
       ),
     );
   }
@@ -1148,12 +1149,20 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                 children: categories.map((cat) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => InsuranceFormScreen(category: cat['name'] as String),
-                        ),
-                      );
+                      final categoryName = cat['name'] as String;
+                      if (categoryName == 'Term Life Insurance') {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ConfirmDetailsDialog(userName: 'User'),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => InsuranceFormScreen(category: categoryName),
+                          ),
+                        );
+                      }
                     },
                     child: _buildCategoryCard(
                       cat['name'] as String,

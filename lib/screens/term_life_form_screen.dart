@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
-import 'confirm_details_dialog.dart';
+import 'view_quotes_screen.dart';
 
 class TermLifeFormScreen extends StatefulWidget {
   final String category;
@@ -411,195 +411,174 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
       ),
       child: Column(
         children: [
-          // Tabs
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            ),
-            padding: const EdgeInsets.all(4),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1976D2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Term Insurance',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Investment plans',
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
           // Form Content
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Tagline
+                // Main Headline
                 Center(
                   child: RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                      style: const TextStyle(fontSize: 22, color: AppColors.textPrimary),
                       children: [
-                        const TextSpan(text: 'Protect your family today and get ₹1 Crore '),
+                        const TextSpan(
+                          text: '₹1 Crore ',
+                          style: TextStyle(
+                            color: Color(0xFF1976D2),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const TextSpan(text: 'life cover starting '),
+                        const TextSpan(text: 'from '),
                         TextSpan(
-                          text: '@₹409/month*',
+                          text: '₹400/month',
                           style: TextStyle(
                             color: Colors.blue[700],
                             fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: '*',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
+                const SizedBox(height: 16),
+                
+                // GST Bachat Utsav Banner
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF5F5F5),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.grey[300]!),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFE4D6),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Text(
+                            'GST Bachat Utsav',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFFD84315),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '--------',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[400],
+                            letterSpacing: 2,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '18% GST',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[500],
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE8F5E9),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            'Now 0%',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF2E7D32),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                
+                // Gender Selection - Pill Style
+                Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildGenderPill('Male'),
+                        _buildGenderPill('Female'),
+                      ],
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 
-                // Gender Selection
-                Row(
-                  children: [
-                    _buildRadioGender('Male'),
-                    const SizedBox(width: 24),
-                    _buildRadioGender('Female'),
-                  ],
+                // Name Field with Label
+                _buildLabeledTextField(
+                  label: 'Your Name',
+                  hint: 'Enter Your Name',
+                  controller: _nameController,
                 ),
                 const SizedBox(height: 16),
                 
-                // Name Field
-                _buildFormTextField(
-                  icon: Icons.person_outline,
-                  hint: 'Your Name',
-                  controller: _nameController,
-                ),
-                const SizedBox(height: 12),
-                
-                // DOB Field
-                _buildFormTextField(
-                  icon: Icons.calendar_today,
-                  hint: 'Date of Birth (DD/MM/YYYY)',
+                // DOB Field with Label
+                _buildLabeledTextField(
+                  label: 'Date of Birth',
+                  hint: 'DD/MM/YYYY',
                   controller: _dobController,
                   onChanged: _calculateAge,
-                  suffix: _age.isNotEmpty
-                    ? Container(
-                        margin: const EdgeInsets.only(right: 12),
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.blue[50],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          _age,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue[700],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      )
-                    : null,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 
                 // Mobile Field with Country Code
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[300]!),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                        decoration: BoxDecoration(
-                          border: Border(right: BorderSide(color: Colors.grey[300]!)),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.flag, size: 20, color: Colors.orange),
-                            const SizedBox(width: 4),
-                            const Icon(Icons.arrow_drop_down, size: 20, color: Colors.grey),
-                            const SizedBox(width: 4),
-                            const Text(
-                              '+91',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: _mobileController,
-                          keyboardType: TextInputType.phone,
-                          decoration: const InputDecoration(
-                            hintText: 'Mobile Number',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
+                _buildMobileField(),
+                const SizedBox(height: 24),
                 
-                // View Quotes Button
+                // View Plans Button - Orange
                 SizedBox(
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton(
                     onPressed: () {
-                      final name = _nameController.text.isNotEmpty 
-                          ? _nameController.text 
-                          : 'User';
-                      showDialog(
-                        context: context,
-                        builder: (context) => ConfirmDetailsDialog(
-                          userName: name,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewQuotesScreen(
+                            category: widget.category,
+                            name: _nameController.text.isNotEmpty ? _nameController.text : 'User',
+                            gender: selectedGender,
+                            age: _age.isNotEmpty ? _age.replaceAll(' years', '') : '30',
+                          ),
                         ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1976D2),
+                      backgroundColor: const Color(0xFFEF6C00),
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -607,7 +586,7 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                       elevation: 0,
                     ),
                     child: const Text(
-                      'View Term Quotes',
+                      'View Plans',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -615,12 +594,79 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 16),
+                
+                // Certified Expert Text
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE3F2FD),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Icon(
+                          Icons.assignment_ind_outlined,
+                          size: 14,
+                          color: Color(0xFF1976D2),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5F5F5),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Text(
+                          'Only certified expert will assist you',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 12),
+                
+                // WhatsApp Toggle
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.verified, size: 14, color: Colors.grey[400]),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Get updates on WhatsApp',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      SizedBox(
+                        height: 24,
+                        width: 36,
+                        child: Switch(
+                          value: true,
+                          onChanged: (value) {},
+                          activeColor: const Color(0xFF25D366),
+                          activeTrackColor: const Color(0xFFE8F5E9),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
                 
                 // Terms text
                 Center(
                   child: Text(
-                    'By clicking on "View Term Quotes" you agree to our Privacy Policy and Terms of use',
+                    'By clicking, you agree to our Privacy policy, Terms of Use & Disclaimers',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 10,
@@ -628,31 +674,65 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                
-                // WhatsApp Toggle
+              ],
+            ),
+          ),
+          
+          // Footer Stats Section
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8FAFC),
+              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
+              border: Border(top: BorderSide(color: Colors.grey[200]!)),
+            ),
+            child: Column(
+              children: [
+                // Logo and Rating
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.verified, size: 14, color: Colors.green[600]),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Get Updates on WhatsApp',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'CoverShield is one of India\'s leading digital',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          Text(
+                            'insurance platform',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      height: 24,
-                      child: Switch(
-                        value: true,
-                        onChanged: (value) {},
-                        activeColor: Colors.green,
-                        activeTrackColor: Colors.green[100],
-                      ),
+                    Row(
+                      children: List.generate(5, (index) {
+                        return Icon(
+                          index < 4 ? Icons.star : Icons.star_half,
+                          color: const Color(0xFFFFB300),
+                          size: 18,
+                        );
+                      }),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Stats Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildFooterStat('13.2 Crore', 'Registered Consumers'),
+                    Container(height: 30, width: 1, color: Colors.grey[300]),
+                    _buildFooterStat('53', 'Insurance Partners'),
+                    Container(height: 30, width: 1, color: Colors.grey[300]),
+                    _buildFooterStat('6.29 Crore', 'Policies Sold'),
                   ],
                 ),
               ],
@@ -663,7 +743,7 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
     );
   }
   
-  Widget _buildRadioGender(String gender) {
+  Widget _buildGenderPill(String gender) {
     final isSelected = selectedGender == gender;
     return GestureDetector(
       onTap: () {
@@ -671,75 +751,153 @@ class _TermLifeFormScreenState extends State<TermLifeFormScreen> {
           selectedGender = gender;
         });
       },
-      child: Row(
-        children: [
-          Container(
-            width: 20,
-            height: 20,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: isSelected ? const Color(0xFF1976D2) : Colors.grey[400]!,
-                width: 2,
-              ),
-            ),
-            child: isSelected
-              ? Container(
-                  margin: const EdgeInsets.all(3),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xFF1976D2),
-                  ),
-                )
-              : null,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF1976D2) : Colors.transparent,
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Text(
+          gender,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: isSelected ? Colors.white : Colors.grey[600],
           ),
-          const SizedBox(width: 8),
-          Text(
-            gender,
-            style: TextStyle(
-              fontSize: 14,
-              color: isSelected ? AppColors.textPrimary : Colors.grey[600],
-              fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
   
-  Widget _buildFormTextField({
-    required IconData icon,
+  Widget _buildLabeledTextField({
+    required String label,
     required String hint,
     required TextEditingController controller,
     Function(String)? onChanged,
-    Widget? suffix,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Icon(icon, size: 20, color: Colors.grey[500]),
-          ),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              onChanged: onChanged,
-              decoration: InputDecoration(
-                hintText: hint,
-                hintStyle: const TextStyle(color: Colors.grey),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                suffixIcon: suffix,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 6),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
             ),
           ),
-        ],
-      ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey[300]!),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: TextField(
+            controller: controller,
+            onChanged: onChanged,
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildMobileField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 6),
+          child: Text(
+            'Mobile Number',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey[300]!),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                decoration: BoxDecoration(
+                  border: Border(right: BorderSide(color: Colors.grey[300]!)),
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'India',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(Icons.arrow_drop_down, size: 18, color: Colors.grey[600]),
+                    const SizedBox(width: 8),
+                    Text(
+                      '+91',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: TextField(
+                  controller: _mobileController,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Mobile Number',
+                    hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildFooterStat(String value, String label) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1976D2),
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
     );
   }
 }

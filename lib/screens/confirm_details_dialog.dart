@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
-import 'policy_list_screen.dart';
+import 'term_life_form_screen.dart';
 
 class ConfirmDetailsDialog extends StatefulWidget {
   final String userName;
@@ -195,7 +195,7 @@ class _ConfirmDetailsDialogState extends State<ConfirmDetailsDialog> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const PolicyListScreen(),
+                          builder: (context) => TermLifeFormScreen(category: 'Term Life Insurance'),
                         ),
                       );
                     },
@@ -211,7 +211,7 @@ class _ConfirmDetailsDialogState extends State<ConfirmDetailsDialog> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'View Plans',
+                          'Submit',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -324,7 +324,7 @@ class _ConfirmDetailsDialogState extends State<ConfirmDetailsDialog> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const PolicyListScreen(),
+                    builder: (context) => TermLifeFormScreen(category: 'Term Life Insurance'),
                   ),
                 );
               },
@@ -340,7 +340,7 @@ class _ConfirmDetailsDialogState extends State<ConfirmDetailsDialog> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'View Plans',
+                    'Submit',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
