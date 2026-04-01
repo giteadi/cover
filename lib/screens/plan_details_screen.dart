@@ -819,11 +819,13 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
+              // Capture scaffold context before async operations
+              final scaffoldContext = context;
               // Navigate to payment or show success
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (context) => AlertDialog(
+                builder: (dialogContext) => AlertDialog(
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -836,13 +838,15 @@ class _PlanDetailsScreenState extends State<PlanDetailsScreen> {
               );
               
               Future.delayed(const Duration(seconds: 2), () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Opening secure payment page...'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                if (scaffoldContext.mounted) {
+                  Navigator.of(scaffoldContext, rootNavigator: true).pop();
+                  ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                    const SnackBar(
+                      content: Text('Opening secure payment page...'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
               });
             },
             style: ElevatedButton.styleFrom(

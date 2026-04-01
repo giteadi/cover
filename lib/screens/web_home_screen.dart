@@ -4,6 +4,7 @@ import '../constants/mock_data.dart';
 import '../models/policy.dart';
 import '../utils/responsive_helper.dart';
 import 'insurance_form_screen.dart';
+import 'policy_renewal_screen.dart';
 import 'bmi_calculator_screen.dart';
 import 'life_insurance_calculator_screen.dart';
 import 'health_insurance_premium_calculator_screen.dart';
@@ -591,12 +592,68 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
               ),
               onTap: () {
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${option['title']} - Coming Soon!'),
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
+                final optionTitle = option['title'] as String;
+                if (optionTitle == 'Term Life Renewal') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PolicyRenewalScreen(
+                        renewalType: 'Term Life',
+                        title: 'Term Life Renewal',
+                        icon: Icons.umbrella,
+                        themeColor: option['color'] as Color,
+                      ),
+                    ),
+                  );
+                } else if (optionTitle == 'Health Renewal') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PolicyRenewalScreen(
+                        renewalType: 'Health',
+                        title: 'Health Renewal',
+                        icon: Icons.favorite,
+                        themeColor: option['color'] as Color,
+                      ),
+                    ),
+                  );
+                } else if (optionTitle == 'Motor Renewal') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PolicyRenewalScreen(
+                        renewalType: 'Motor',
+                        title: 'Motor Renewal',
+                        icon: Icons.directions_car,
+                        themeColor: option['color'] as Color,
+                      ),
+                    ),
+                  );
+                } else if (optionTitle == 'Two Wheeler Renewal') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PolicyRenewalScreen(
+                        renewalType: 'Two Wheeler',
+                        title: 'Two Wheeler Renewal',
+                        icon: Icons.two_wheeler,
+                        themeColor: option['color'] as Color,
+                      ),
+                    ),
+                  );
+                } else if (optionTitle == 'Home Insurance Renewal') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PolicyRenewalScreen(
+                        renewalType: 'Home',
+                        title: 'Home Insurance Renewal',
+                        icon: Icons.home,
+                        themeColor: option['color'] as Color,
+                      ),
+                    ),
+                  );
+                }
               },
             );
           }).toList();

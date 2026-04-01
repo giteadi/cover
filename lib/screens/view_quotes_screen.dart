@@ -871,19 +871,21 @@ class _ViewQuotesScreenState extends State<ViewQuotesScreen> {
                 if (Navigator.canPop(loadingContext)) {
                   Navigator.pop(loadingContext);
                 }
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.white),
-                        SizedBox(width: 8),
-                        Text('Quotes PDF downloaded successfully!'),
-                      ],
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(Icons.check_circle, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text('Quotes PDF downloaded successfully!'),
+                        ],
+                      ),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 3),
                     ),
-                    backgroundColor: Colors.green,
-                    duration: Duration(seconds: 3),
-                  ),
-                );
+                  );
+                }
               });
             },
             icon: const Icon(Icons.download),
@@ -1005,7 +1007,8 @@ class _ViewQuotesScreenState extends State<ViewQuotesScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   Navigator.pop(context);
-                                  _buyPlan(plan);
+                                  final planToBuy = plan;
+                                  Future.microtask(() => _buyPlan(planToBuy));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary,
